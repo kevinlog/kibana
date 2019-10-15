@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import {
   EuiPage,
@@ -19,10 +19,29 @@ import {
   EuiTitle,
   EuiSideNav,
   EuiBasicTable,
+  EuiSearchBar,
 } from '@elastic/eui';
-export const Management = ({ endpointMetadata }: { endpointMetadata: any }) => {
-  const endpointMetadataTable = (tableData: any) => {
-    const items = tableData.hits.hits;
+
+interface Props {
+  endpointMetadata: any;
+}
+
+interface State {
+  queriedEndpointMetadata: {};
+}
+
+export class EndpointList extends Component<Props, State> {
+  public state = {
+    queriedEndpointMetadata: null,
+  };
+
+  public render() {
+    const { endpointMetadata } = this.props;
+    const { queriedEndpointMetadata } = this.state;
+
+    const items: [] = queriedEndpointMetadata
+      ? queriedEndpointMetadata
+      : endpointMetadata.hits.hits;
 
     const columns = [
       {
@@ -63,8 +82,43 @@ export const Management = ({ endpointMetadata }: { endpointMetadata: any }) => {
       },
     ];
 
-    return <EuiBasicTable items={items} columns={columns} />;
-  };
+    const SearchBar = ({
+      searchItems,
+      defaultFields,
+    }: {
+      searchItems: [];
+      defaultFields: string[];
+    }) => {
+      const defaultOnChange = ({ query }: { query: string }) => {
+        const result = EuiSearchBar.Query.execute(query, searchItems, {
+          defaultFields,
+        });
+        this.setState({ queriedEndpointMetadata: result });
+      };
+
+      return (
+        <EuiSearchBar
+          defaultQuery={EuiSearchBar.Query.MATCH_ALL}
+          box={{
+            placeholder: 'stuff',
+            incremental: false,
+            filters: [],
+          }}
+          onChange={defaultOnChange}
+        />
+      );
+    };
+
+    return (
+      <>
+        <SearchBar items={endpointMetadata.hits.hits} defaultFields={[`_source`]} />
+        <EuiBasicTable items={items} columns={columns} />
+      </>
+    );
+  }
+}
+
+export const Management = ({ endpointMetadata }: { endpointMetadata: any }) => {
   return (
     <EuiPageBody data-test-subj="fooAppPageA">
       <EuiPageHeader>
@@ -84,7 +138,7 @@ export const Management = ({ endpointMetadata }: { endpointMetadata: any }) => {
         </EuiPageContentHeader>
         <EuiPageContentBody>
           Here's your Endpoints
-          {endpointMetadataTable(endpointMetadata)}
+          <EndpointList endpointMetadata={endpointMetadata} />
         </EuiPageContentBody>
       </EuiPageContent>
     </EuiPageBody>
