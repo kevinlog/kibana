@@ -116,7 +116,6 @@ export const Management = ({ endpointMetadata }: { endpointMetadata: any }) => {
           </EuiPageContentHeaderSection>
         </EuiPageContentHeader>
         <EuiPageContentBody>
-          Here's your Endpoints
           <EndpointList endpointMetadata={endpointMetadata} />
         </EuiPageContentBody>
       </EuiPageContent>

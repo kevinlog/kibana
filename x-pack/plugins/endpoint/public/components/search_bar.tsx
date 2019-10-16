@@ -34,7 +34,7 @@ export class SearchBar extends Component<SearchBarProps, SearchBarState> {
       <EuiSearchBar
         defaultQuery={EuiSearchBar.Query.MATCH_ALL}
         box={{
-          placeholder: 'stuff',
+          placeholder: 'try _source.host.ip:"10.11.12.13"',
           incremental: false,
           filters: [],
         }}
