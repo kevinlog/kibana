@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 
 import {
-  EuiPage,
   EuiPageBody,
   EuiPageContent,
   EuiPageContentBody,
@@ -15,12 +14,11 @@ import {
   EuiPageContentHeaderSection,
   EuiPageHeader,
   EuiPageHeaderSection,
-  EuiPageSideBar,
   EuiTitle,
-  EuiSideNav,
   EuiBasicTable,
-  EuiSearchBar,
 } from '@elastic/eui';
+
+import { SearchBar } from './search_bar';
 
 interface Props {
   endpointMetadata: any;
@@ -33,6 +31,10 @@ interface State {
 export class EndpointList extends Component<Props, State> {
   public state = {
     queriedEndpointMetadata: null,
+  };
+
+  public updateOnChange = ({ updatedResult }: { updatedResult: {} }) => {
+    this.setState({ queriedEndpointMetadata: updatedResult });
   };
 
   public render() {
@@ -82,36 +84,13 @@ export class EndpointList extends Component<Props, State> {
       },
     ];
 
-    const SearchBar = ({
-      searchItems,
-      defaultFields,
-    }: {
-      searchItems: [];
-      defaultFields: string[];
-    }) => {
-      const defaultOnChange = ({ query }: { query: string }) => {
-        const result = EuiSearchBar.Query.execute(query, searchItems, {
-          defaultFields,
-        });
-        this.setState({ queriedEndpointMetadata: result });
-      };
-
-      return (
-        <EuiSearchBar
-          defaultQuery={EuiSearchBar.Query.MATCH_ALL}
-          box={{
-            placeholder: 'stuff',
-            incremental: false,
-            filters: [],
-          }}
-          onChange={defaultOnChange}
-        />
-      );
-    };
-
     return (
       <>
-        <SearchBar items={endpointMetadata.hits.hits} defaultFields={[`_source`]} />
+        <SearchBar
+          searchItems={endpointMetadata.hits.hits}
+          defaultFields={[`_source`]}
+          updateOnChange={this.updateOnChange}
+        />
         <EuiBasicTable items={items} columns={columns} />
       </>
     );
