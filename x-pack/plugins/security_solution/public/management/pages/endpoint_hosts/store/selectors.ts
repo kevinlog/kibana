@@ -37,6 +37,10 @@ export const detailsLoading = (state: Immutable<HostState>): boolean => state.de
 
 export const detailsError = (state: Immutable<HostState>) => state.detailsError;
 
+export const patterns = (state: Immutable<HostState>) => state.patterns;
+
+export const patterns = (state: Immutable<HostState>) => state.patterns;
+
 /**
  * Returns the full policy response from the endpoint after a user modifies a policy.
  */

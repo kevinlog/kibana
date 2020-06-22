@@ -40,6 +40,7 @@ import {
   getPolicyDetailPath,
 } from '../../../common/routing';
 import { useFormatUrl } from '../../../../common/components/link_to';
+import { ManagementIndexSearchBar } from '../../../components/search_bar';
 
 const HostListNavLink = memo<{
   name: string;
@@ -268,6 +269,7 @@ export const HostList = () => {
           values={{ totalItemCount }}
         />
       </EuiText>
+      <ManagementIndexSearchBar />
       <EuiHorizontalRule margin="xs" />
       <EuiBasicTable
         data-test-subj="hostListTable"

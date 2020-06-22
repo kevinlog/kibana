@@ -12,6 +12,7 @@ import {
   AppLocation,
 } from '../../../../common/endpoint/types';
 import { ServerApiError } from '../../../common/types';
+import { IIndexPattern } from '../../../../../../../src/plugins/data/public';
 
 export interface HostState {
   /** list of host **/
@@ -40,6 +41,8 @@ export interface HostState {
   policyResponseError?: ServerApiError;
   /** current location info */
   location?: Immutable<AppLocation>;
+  /** index patterns for HostList */
+  patterns: IIndexPattern[];
 }
 
 /**

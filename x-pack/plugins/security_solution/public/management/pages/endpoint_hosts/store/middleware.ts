@@ -8,8 +8,26 @@ import { HostResultList } from '../../../../../common/endpoint/types';
 import { ImmutableMiddlewareFactory } from '../../../../common/store';
 import { isOnHostPage, hasSelectedHost, uiQueryParams, listData } from './selectors';
 import { HostState } from '../types';
+import { metadataIndexPattern } from '../../../../../common/endpoint/constants';
+import { IIndexPattern } from '../../../../../../../../src/plugins/data/public';
 
-export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (coreStart) => {
+export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (
+  coreStart,
+  depsStart
+) => {
+  async function fetchIndexPatterns(): Promise<IIndexPattern[]> {
+    const { indexPatterns } = depsStart.data;
+    const fields = await indexPatterns.getFieldsForWildcard({
+      pattern: metadataIndexPattern,
+    });
+    const indexPattern: IIndexPattern = {
+      title: metadataIndexPattern,
+      fields,
+    };
+
+    return [indexPattern];
+  }
+
   return ({ getState, dispatch }) => (next) => async (action) => {
     next(action);
     const state = getState();
@@ -20,6 +38,13 @@ export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (cor
     ) {
       const { page_index: pageIndex, page_size: pageSize } = uiQueryParams(state);
       try {
+        const patterns = await fetchIndexPatterns();
+
+        dispatch({
+          type: 'serverReturnedMetadataPatterns',
+          payload: patterns,
+        });
+
         const response = await coreStart.http.post<HostResultList>('/api/endpoint/metadata', {
           body: JSON.stringify({
             paging_properties: [{ page_index: pageIndex }, { page_size: pageSize }],

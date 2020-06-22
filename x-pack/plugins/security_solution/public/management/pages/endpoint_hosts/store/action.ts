@@ -9,6 +9,7 @@ import {
   HostInfo,
   GetHostPolicyResponse,
 } from '../../../../../common/endpoint/types';
+import { IIndexPattern } from '../../../../../../../../src/plugins/data/public';
 import { ServerApiError } from '../../../../common/types';
 
 interface ServerReturnedHostList {
@@ -41,10 +42,16 @@ interface ServerFailedToReturnHostPolicyResponse {
   payload: ServerApiError;
 }
 
+interface ServerReturnedMetadataPatterns {
+  type: 'serverReturnedMetadataPatterns';
+  payload: IIndexPattern[];
+}
+
 export type HostAction =
   | ServerReturnedHostList
   | ServerFailedToReturnHostList
   | ServerReturnedHostDetails
   | ServerFailedToReturnHostDetails
   | ServerReturnedHostPolicyResponse
-  | ServerFailedToReturnHostPolicyResponse;
+  | ServerFailedToReturnHostPolicyResponse
+  | ServerReturnedMetadataPatterns;

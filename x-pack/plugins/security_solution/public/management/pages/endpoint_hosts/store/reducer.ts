@@ -65,6 +65,11 @@ export const hostListReducer: ImmutableReducer<HostState, AppAction> = (
       detailsError: action.payload,
       detailsLoading: false,
     };
+  } else if (action.type === 'serverReturnedMetadataPatterns') {
+    return {
+      ...state,
+      patterns: action.payload,
+    };
   } else if (action.type === 'serverReturnedHostPolicyResponse') {
     return {
       ...state,
