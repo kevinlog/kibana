@@ -4,12 +4,15 @@
  * you may not use this file except in compliance with the Elastic License.
  */
 
+import { encode, decode } from 'rison-node';
+import { Query, TimeRange, Filter } from 'src/plugins/data/public';
 import { HostResultList } from '../../../../../common/endpoint/types';
 import { ImmutableMiddlewareFactory } from '../../../../common/store';
 import { isOnHostPage, hasSelectedHost, uiQueryParams, listData } from './selectors';
 import { HostState } from '../types';
 import { metadataIndexPattern } from '../../../../../common/endpoint/constants';
 import { IIndexPattern } from '../../../../../../../../src/plugins/data/public';
+import { cloneHttpFetchQuery } from '../../../../common/utils/clone_http_fetch_query';
 
 export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (
   coreStart,
@@ -36,7 +39,11 @@ export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (
       isOnHostPage(state) &&
       hasSelectedHost(state) !== true
     ) {
-      const { page_index: pageIndex, page_size: pageSize } = uiQueryParams(state);
+      const {
+        page_index: pageIndex,
+        page_size: pageSize,
+        management_query: managementQuery,
+      } = uiQueryParams(state);
       try {
         const patterns = await fetchIndexPatterns();
 
@@ -45,9 +52,23 @@ export const hostMiddlewareFactory: ImmutableMiddlewareFactory<HostState> = (
           payload: patterns,
         });
 
+        dispatch({
+          type: 'userUpdatedSearchBarQuery',
+          payload: managementQuery,
+        });
+
+        // TODO: get logic out of middleware
+        let decodedQuery;
+        if (managementQuery !== undefined) {
+          decodedQuery = (decode(managementQuery) as unknown) as Query;
+        } else {
+          decodedQuery = { query: '', language: 'kuery' };
+        }
+
         const response = await coreStart.http.post<HostResultList>('/api/endpoint/metadata', {
           body: JSON.stringify({
             paging_properties: [{ page_index: pageIndex }, { page_size: pageSize }],
+            filter: decodedQuery.query,
           }),
         });
         response.request_page_index = Number(pageIndex);

@@ -8,6 +8,8 @@
 import querystring from 'querystring';
 import { createSelector } from 'reselect';
 import { matchPath } from 'react-router-dom';
+import { encode, decode } from 'rison-node';
+import { Query, TimeRange, Filter } from 'src/plugins/data/public';
 import {
   Immutable,
   HostPolicyResponseAppliedAction,
@@ -36,8 +38,6 @@ export const detailsData = (state: Immutable<HostState>) => state.details;
 export const detailsLoading = (state: Immutable<HostState>): boolean => state.detailsLoading;
 
 export const detailsError = (state: Immutable<HostState>) => state.detailsError;
-
-export const patterns = (state: Immutable<HostState>) => state.patterns;
 
 export const patterns = (state: Immutable<HostState>) => state.patterns;
 
@@ -126,6 +126,7 @@ export const uiQueryParams: (
         'page_size',
         'page_index',
         'show',
+        'management_query',
       ];
 
       for (const key of keys) {
@@ -159,6 +160,17 @@ export const uiQueryParams: (
       }
     }
     return data;
+  }
+);
+
+export const searchBarQuery: (state: Immutable<HostState>) => Query = createSelector(
+  uiQueryParams,
+  ({ management_query: managementQuery }) => {
+    if (managementQuery !== undefined) {
+      return (decode(managementQuery) as unknown) as Query;
+    } else {
+      return { query: '', language: 'kuery' };
+    }
   }
 );
 

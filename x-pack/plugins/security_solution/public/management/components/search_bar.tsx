@@ -18,7 +18,7 @@ export const ManagementIndexSearchBar = memo(() => {
   const history = useHistory();
   const queryParams = useHostSelector(selectors.uiQueryParams);
   const searchBarIndexPatterns = useHostSelector(selectors.patterns);
-  // const searchBarQuery = useAlertListSelector(selectors.searchBarQuery);
+  const searchBarQuery = useHostSelector(selectors.searchBarQuery);
   // const searchBarDateRange = useAlertListSelector(selectors.searchBarDateRange);
   // const searchBarFilters = useAlertListSelector(selectors.searchBarFilters);
 
@@ -52,7 +52,7 @@ export const ManagementIndexSearchBar = memo(() => {
       history.push(
         urlFromQueryParams({
           ...queryParams,
-          query: encode((params.query as unknown) as RisonValue),
+          management_query: encode((params.query as unknown) as RisonValue),
           date_range: encode((params.dateRange as unknown) as RisonValue),
         })
       );
@@ -67,9 +67,10 @@ export const ManagementIndexSearchBar = memo(() => {
           dataTestSubj="alertsSearchBar"
           appName="endpoint"
           isLoading={false}
+          query={searchBarQuery}
           indexPatterns={searchBarIndexPatterns}
           onQuerySubmit={onQuerySubmit}
-          showFilterBar={true}
+          showFilterBar={false}
           showDatePicker={false}
           showQueryBar={true}
           showQueryInput={true}

@@ -43,6 +43,8 @@ export interface HostState {
   location?: Immutable<AppLocation>;
   /** index patterns for HostList */
   patterns: IIndexPattern[];
+  /** query from the search bar */
+  searchBarQuery: string;
 }
 
 /**
@@ -57,4 +59,6 @@ export interface HostIndexUIQueryParams {
   page_index?: string;
   /** show the policy response or host details */
   show?: 'policy_response' | 'details';
+  /** query from the search bar */
+  management_query?: string;
 }

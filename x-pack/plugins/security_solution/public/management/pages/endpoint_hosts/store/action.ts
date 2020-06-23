@@ -47,6 +47,11 @@ interface ServerReturnedMetadataPatterns {
   payload: IIndexPattern[];
 }
 
+interface UserUpdatedSearchBarQuery {
+  type: 'userUpdatedSearchBarQuery';
+  payload: string;
+}
+
 export type HostAction =
   | ServerReturnedHostList
   | ServerFailedToReturnHostList
@@ -54,4 +59,5 @@ export type HostAction =
   | ServerFailedToReturnHostDetails
   | ServerReturnedHostPolicyResponse
   | ServerFailedToReturnHostPolicyResponse
-  | ServerReturnedMetadataPatterns;
+  | ServerReturnedMetadataPatterns
+  | UserUpdatedSearchBarQuery;

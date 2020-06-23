@@ -70,6 +70,11 @@ export const hostListReducer: ImmutableReducer<HostState, AppAction> = (
       ...state,
       patterns: action.payload,
     };
+  } else if (action.type === 'userUpdatedSearchBarQuery') {
+    return {
+      ...state,
+      searchBarQuery: action.payload,
+    };
   } else if (action.type === 'serverReturnedHostPolicyResponse') {
     return {
       ...state,
