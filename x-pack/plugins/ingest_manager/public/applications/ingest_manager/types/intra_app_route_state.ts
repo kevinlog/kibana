@@ -30,8 +30,19 @@ export interface AgentConfigDetailsDeployAgentAction {
 }
 
 /**
+ * Supported routing state for the agent config details page routes with deploy agents action
+ */
+export interface ConfigDetailsEditAction {
+  /** On save, navigate to the given app */
+  onSaveNavigateTo?: Parameters<ApplicationStart['navigateToApp']>;
+  /** On cancel, navigate to the given app */
+  onCancelNavigateTo?: Parameters<ApplicationStart['navigateToApp']>;
+}
+
+/**
  * All possible Route states.
  */
 export type AnyIntraAppRouteState =
   | CreateDatasourceRouteState
-  | AgentConfigDetailsDeployAgentAction;
+  | AgentConfigDetailsDeployAgentAction
+  | ConfigDetailsEditAction;

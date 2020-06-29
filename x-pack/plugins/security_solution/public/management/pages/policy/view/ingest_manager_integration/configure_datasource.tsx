@@ -8,23 +8,50 @@ import React, { memo } from 'react';
 import { FormattedMessage } from '@kbn/i18n/react';
 import { EuiCallOut, EuiText, EuiTitle, EuiSpacer } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
+import { ApplicationStart } from 'kibana/public';
 import { LinkToApp } from '../../../../../common/components/endpoint/link_to_app';
 import {
   CustomConfigureDatasourceContent,
   CustomConfigureDatasourceProps,
 } from '../../../../../../../ingest_manager/public';
 import { getPolicyDetailPath } from '../../../../common/routing';
+import { useNavigateToAppEventHandler } from '../../../../../common/hooks/endpoint/use_navigate_to_app_event_handler';
 
 /**
  * Exports Endpoint-specific datasource configuration instructions
  * for use in the Ingest app create / edit datasource config
  */
 export const ConfigureEndpointDatasource = memo<CustomConfigureDatasourceContent>(
-  ({ from, datasourceId }: CustomConfigureDatasourceProps) => {
+  ({ from, datasourceId, datasource }: CustomConfigureDatasourceProps) => {
     let policyUrl = '';
     if (from === 'edit' && datasourceId) {
       policyUrl = getPolicyDetailPath(datasourceId);
     }
+    // const routeState = useIntraAppState<ConfigDetailsEditAction>();
+    /**
+     * Supported routing state for the agent config details page routes with deploy agents action
+     */
+    interface ConfigDetailsEditAction {
+      /** On save, navigate to the given app */
+      onSaveNavigateTo?: Parameters<ApplicationStart['navigateToApp']>;
+      /** On cancel, navigate to the given app */
+      onCancelNavigateTo?: Parameters<ApplicationStart['navigateToApp']>;
+    }
+
+    const handleEditPolicyClick = useNavigateToAppEventHandler<ConfigDetailsEditAction>(
+      'securitySolution:management',
+      {
+        path: policyUrl,
+        state: {
+          onSaveNavigateTo: [
+            'ingestManager',
+            {
+              path: `#/configs/${datasource.config_id}/edit-datasource/${datasourceId}`,
+            },
+          ],
+        },
+      }
+    );
 
     return (
       <>
@@ -62,6 +89,7 @@ export const ConfigureEndpointDatasource = memo<CustomConfigureDatasourceContent
                     appId="securitySolution:management"
                     className="editLinkToPolicyDetails"
                     appPath={policyUrl}
+                    onClick={handleEditPolicyClick}
                     // Cannot use formalUrl here since the code is called in Ingest, which does not use redux
                   >
                     <FormattedMessage
