@@ -64,7 +64,13 @@ const PackageConfigBaseSchema = {
 
 export const NewPackageConfigSchema = schema.object({
   ...PackageConfigBaseSchema,
+  config_name: schema.maybe(schema.string()),
 });
+
+// export const NewPackageConfigWithEnrichments = schema.object({
+//   ...NewPackageConfigSchema,
+//   config_name: schema.maybe(schema.string()),
+// });
 
 export const UpdatePackageConfigSchema = schema.object({
   ...PackageConfigBaseSchema,

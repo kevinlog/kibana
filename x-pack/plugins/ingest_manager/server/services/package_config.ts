@@ -56,6 +56,8 @@ class PackageConfigService {
       ) {
         throw new Error('There is already a package with the same name on this agent config');
       }
+
+      packageConfig.config_name = parentAgentConfig.name;
     }
 
     // Make sure the associated package is installed
@@ -118,6 +120,7 @@ class PackageConfigService {
     soClient: SavedObjectsClientContract,
     packageConfigs: NewPackageConfig[],
     configId: string,
+    configName: string,
     options?: { user?: AuthenticatedUser; bumpConfigRevision?: boolean }
   ): Promise<PackageConfig[]> {
     const isoDate = new Date().toISOString();

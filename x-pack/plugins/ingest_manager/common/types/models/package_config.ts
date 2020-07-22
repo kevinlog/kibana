@@ -50,6 +50,7 @@ export interface NewPackageConfig {
   namespace: string;
   enabled: boolean;
   config_id: string;
+  config_name?: string;
   output_id: string;
   package?: PackageConfigPackage;
   inputs: NewPackageConfigInput[];

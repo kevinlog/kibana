@@ -3,10 +3,10 @@
  * or more contributor license agreements. Licensed under the Elastic License;
  * you may not use this file except in compliance with the Elastic License.
  */
-import { TypeOf } from '@kbn/config-schema';
+import { TypeOf, schema } from '@kbn/config-schema';
 import Boom from 'boom';
 import { RequestHandler } from 'src/core/server';
-import { appContextService, packageConfigService } from '../../services';
+import { appContextService, packageConfigService, agentConfigService } from '../../services';
 import { getPackageInfo } from '../../services/epm/packages';
 import {
   GetPackageConfigsRequestSchema,
@@ -82,10 +82,16 @@ export const createPackageConfigHandler: RequestHandler<
   const user = (await appContextService.getSecurity()?.authc.getCurrentUser(request)) || undefined;
   const logger = appContextService.getLogger();
   let newData = { ...request.body };
+  logger.warn('NEW DATA');
+  logger.warn();
   try {
     // If we have external callbacks, then process those now before creating the actual package config
     const externalCallbacks = appContextService.getExternalCallbacks('packageConfigCreate');
     if (externalCallbacks && externalCallbacks.size > 0) {
+      // const NewPackageConfigWithConfigName = schema.object({
+      //   ...NewPackageConfig,
+      //   config_name: schema.string(),
+      // });
       let updatedNewData: NewPackageConfig = newData;
 
       for (const callback of externalCallbacks) {
@@ -106,7 +112,16 @@ export const createPackageConfigHandler: RequestHandler<
       newData = updatedNewData;
     }
 
+    logger.warn('NEW DATA.....');
+    logger.warn(newData);
     // Create package config
+    const agentConfig = await agentConfigService.get(soClient, newData.config_id);
+    logger.warn('AGENT CONFIG.....');
+    logger.warn(agentConfig);
+    const enrichedData: NewPackageConfig = {
+      ...newData,
+      config_name: agentConfig.name,
+    };
     const packageConfig = await packageConfigService.create(soClient, callCluster, newData, {
       user,
     });
