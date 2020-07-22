@@ -12,6 +12,14 @@ import { PolicyConfig, ProtectionModes } from '../types';
 export const factory = (): PolicyConfig => {
   return {
     windows: {
+      advanced: {
+        elasticsearch: {
+          tls: {
+            verify_peer: false,
+            verify_hostname: false,
+          },
+        },
+      },
       events: {
         dll_and_driver_load: true,
         dns: true,
@@ -29,6 +37,14 @@ export const factory = (): PolicyConfig => {
       },
     },
     mac: {
+      advanced: {
+        elasticsearch: {
+          tls: {
+            verify_peer: false,
+            verify_hostname: false,
+          },
+        },
+      },
       events: {
         process: true,
         file: true,
@@ -42,6 +58,14 @@ export const factory = (): PolicyConfig => {
       },
     },
     linux: {
+      advanced: {
+        elasticsearch: {
+          tls: {
+            verify_peer: false,
+            verify_hostname: false,
+          },
+        },
+      },
       events: {
         process: true,
         file: true,
