@@ -237,7 +237,7 @@ export const policyResponseStatus: (state: Immutable<EndpointState>) => string =
 export const policyResponseArtifacts: (state: Immutable<EndpointState>) => string = createSelector(
   (state) => state.policyResponse,
   (policyResponse) => {
-    return (policyResponse && policyResponse?.Endpoint?.policy?.applied?.artifacts) || {};
+    return policyResponse && policyResponse?.Endpoint?.policy?.applied?.artifacts;
   }
 );
 

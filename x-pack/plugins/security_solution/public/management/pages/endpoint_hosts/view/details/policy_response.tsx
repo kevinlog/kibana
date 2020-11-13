@@ -147,6 +147,7 @@ const ArtifactDetails = memo(
   }) => {
     return (
       <EuiAccordion
+        id={artrifactGroup}
         data-test-subj="endpointDetailsPolicyResponseActionsAccordion"
         className="policyResponseActionsAccordion"
         buttonContent={
@@ -201,6 +202,7 @@ const ArtifactDetailsV2 = memo(
   }) => {
     return (
       <EuiAccordion
+        id={artrifactGroup}
         data-test-subj="endpointDetailsPolicyResponseActionsAccordion"
         className="policyResponseActionsAccordion"
         buttonContent={
