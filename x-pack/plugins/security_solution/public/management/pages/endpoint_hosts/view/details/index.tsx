@@ -33,6 +33,7 @@ import {
   policyResponseError,
   policyResponseLoading,
   policyResponseTimestamp,
+  policyResponseArtifacts,
 } from '../../store/selectors';
 import { EndpointDetails } from './endpoint_details';
 import { PolicyResponse } from './policy_response';
@@ -125,6 +126,7 @@ const PolicyResponseFlyoutPanel = memo<{
   const error = useEndpointSelector(policyResponseError);
   const { formatUrl } = useFormatUrl(SecurityPageName.administration);
   const responseTimestamp = useEndpointSelector(policyResponseTimestamp);
+  const responseArtifacts = useEndpointSelector(policyResponseArtifacts);
   const [detailsUri, detailsRoutePath] = useMemo(
     () => [
       formatUrl(
@@ -189,6 +191,7 @@ const PolicyResponseFlyoutPanel = memo<{
             responseConfig={responseConfig}
             responseActions={responseActions}
             responseAttentionCount={responseAttentionCount}
+            responseArtifacts={responseArtifacts}
           />
         )}
       </EuiFlyoutBody>

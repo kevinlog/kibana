@@ -1021,6 +1021,8 @@ export interface HostPolicyResponseAppliedAction {
 
 export type HostPolicyResponseConfiguration = HostPolicyResponse['Endpoint']['policy']['applied']['response']['configurations'];
 
+export type HostPolicyResponseArtifacts = HostPolicyResponse['Endpoint']['policy']['applied']['artifacts'];
+
 interface HostPolicyResponseConfigurationStatus {
   status: HostPolicyResponseActionStatus;
   concerned_actions: HostPolicyActionName[];

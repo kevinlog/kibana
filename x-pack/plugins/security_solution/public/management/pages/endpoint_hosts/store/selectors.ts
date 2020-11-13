@@ -232,6 +232,16 @@ export const policyResponseStatus: (state: Immutable<EndpointState>) => string =
 );
 
 /**
+ * Returns the Policy Response artifacts
+ */
+export const policyResponseArtifacts: (state: Immutable<EndpointState>) => string = createSelector(
+  (state) => state.policyResponse,
+  (policyResponse) => {
+    return (policyResponse && policyResponse?.Endpoint?.policy?.applied?.artifacts) || {};
+  }
+);
+
+/**
  * returns the list of known non-existing polices that may have been in the Endpoint API response.
  * @param state
  */
