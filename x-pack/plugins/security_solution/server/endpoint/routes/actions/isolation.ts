@@ -91,6 +91,8 @@ export const isolationRequestHandler = function (
       });
     }
 
+    // TODO: Add logic to API.
+
     // translate any endpoint_ids into agent_ids
     let agentIDs = req.body.agent_ids?.slice() || [];
     if (req.body.endpoint_ids && req.body.endpoint_ids.length > 0) {

@@ -60,6 +60,43 @@ export const useEndpointActionItems = (
         selected_endpoint: endpointId,
       });
 
+      // const isVersionSupported = ({
+      //   currentVersion,
+      //   minVersionRequired,
+      // }: {
+      //   currentVersion: string;
+      //   minVersionRequired: string;
+      // }) => {
+      //   const tokenizedCurrent = currentVersion.split('.').map((token: string) => parseInt(token));
+      //   const tokenizedMin = minVersionRequired.split('.').map((token: string) => parseInt(token));
+
+      //   const versionNotSupported = tokenizedCurrent.some((token: number, index: number) => {
+      //     return token < tokenizedMin[index];
+      //   });
+
+      //   return !versionNotSupported;
+      // };
+
+      // const isOsSupported = ({
+      //   currentOs,
+      //   supportedOss,
+      // }: {
+      //   currentOs: string;
+      //   supportedOss: string[];
+      // }) => {
+      //   return supportedOss.some((os) => currentOs === os);
+      // };
+
+      // const isIsolationSupported = (endpointMetadata: MaybeImmutable<HostMetadata>) => {
+      //   const osFamily = endpointMetadata.host.os.family;
+      //   const version = endpointMetadata.agent.version;
+
+      //   return (
+      //     isOsSupported({ currentOs: osFamily, supportedOss: ['macos', 'windows'] }) &&
+      //     isVersionSupported({ currentVersion: version, minVersionRequired: '7.14.0' })
+      //   );
+      // };
+
       const isolationActions = [];
 
       if (isIsolated) {
